@@ -16,7 +16,7 @@ public class DriveTrain extends AbstractComponent {
     private static final double MINIMUM_MOVEMENT_THRESHOLD = 0.05; // Dead zone for inputs
 
     // Hardware components
-    private DcMotor mtr_frontLeft, mtr_frontRight, mtr_backLeft, mtr_backRight;
+    private DcMotor motorFrontLeft, motorFrontRight, motorBackLeft, motorBackRight;
 
     // State tracking
     private Map<String, Double> lastMotorPowers;
@@ -38,28 +38,28 @@ public class DriveTrain extends AbstractComponent {
         HardwareMap hardwareMap = robot.getHardwareMap();
 
         try {
-            mtr_frontLeft = hardwareMap.get(DcMotor.class, "motor_front_left");
-            mtr_frontRight = hardwareMap.get(DcMotor.class, "motor_front_right");
-            mtr_backLeft = hardwareMap.get(DcMotor.class, "motor_back_left");
-            mtr_backRight = hardwareMap.get(DcMotor.class, "motor_back_right");
+            motorFrontLeft = hardwareMap.get(DcMotor.class, "motor_front_left");
+            motorFrontRight = hardwareMap.get(DcMotor.class, "motor_front_right");
+            motorBackLeft = hardwareMap.get(DcMotor.class, "motor_back_left");
+            motorBackRight = hardwareMap.get(DcMotor.class, "motor_back_right");
 
             // Verify all motors were found
-            if (mtr_frontLeft == null || mtr_frontRight == null ||
-                    mtr_backLeft == null || mtr_backRight == null) {
+            if (motorFrontLeft == null || motorFrontRight == null ||
+                    motorBackLeft == null || motorBackRight == null) {
                 throw new RuntimeException("One or more motors not found in hardware map");
             }
 
             // Initialize each motor
-            initializeMotor(mtr_frontLeft, "Front Left");
-            initializeMotor(mtr_frontRight, "Front Right");
-            initializeMotor(mtr_backLeft, "Back Left");
-            initializeMotor(mtr_backRight, "Back Right");
+            initializeMotor(motorFrontLeft, "Front Left");
+            initializeMotor(motorFrontRight, "Front Right");
+            initializeMotor(motorBackLeft, "Back Left");
+            initializeMotor(motorBackRight, "Back Right");
 
             // Set motor directions
-            mtr_frontLeft.setDirection(DcMotor.Direction.REVERSE);
-            mtr_backLeft.setDirection(DcMotor.Direction.REVERSE);
-            mtr_frontRight.setDirection(DcMotor.Direction.FORWARD);
-            mtr_backRight.setDirection(DcMotor.Direction.FORWARD);
+            motorFrontLeft.setDirection(DcMotor.Direction.REVERSE);
+            motorBackLeft.setDirection(DcMotor.Direction.REVERSE);
+            motorFrontRight.setDirection(DcMotor.Direction.FORWARD);
+            motorBackRight.setDirection(DcMotor.Direction.FORWARD);
 
             // Initialize last power values
             lastMotorPowers.put("frontLeft", 0.0);
@@ -82,13 +82,13 @@ public class DriveTrain extends AbstractComponent {
 
         try {
             // Reset encoder to ensure clean starting state
-            motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            //motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
             // For general driving, RUN_USING_ENCODER provides velocity PID control
             motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             // Use FLOAT for smoother mecanum drive operation
-            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            //motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             motor.setPower(0);
 
             // Verify encoder is connected and functioning
@@ -107,7 +107,9 @@ public class DriveTrain extends AbstractComponent {
 
     @Override
     public void update() {
-        if (!isOperational()) return;
+        if (!isOperational()) {
+            return;
+        }
         reportMotorPowers("update");
     }
 
@@ -119,31 +121,31 @@ public class DriveTrain extends AbstractComponent {
 
         try {
             // Apply dead zone
-            if (Math.abs(power) < MINIMUM_MOVEMENT_THRESHOLD) {
-                power = 0.0;
-            }
+//            if (Math.abs(power) < MINIMUM_MOVEMENT_THRESHOLD) {
+//                power = 0.0;
+//            }
 
             // Bound the power
-            power = Math.max(MIN_POWER, Math.min(MAX_POWER, power));
+            //power = Math.max(MIN_POWER, Math.min(MAX_POWER, power));
 
             // Get the last power value and time
-            double lastPower = lastMotorPowers.getOrDefault(motorName, 0.0);
-            long currentTime = System.currentTimeMillis();
-            double timeElapsed = (currentTime - lastUpdateTime) / 1000.0;
-
-            // Limit acceleration if enough time has passed
-            if (lastUpdateTime != 0 && timeElapsed > 0) {
-                double maxChange = POWER_CHANGE_LIMIT * timeElapsed;
-                double powerChange = power - lastPower;
-                if (Math.abs(powerChange) > maxChange) {
-                    power = lastPower + Math.signum(powerChange) * maxChange;
-                }
-            }
+//            double lastPower = lastMotorPowers.getOrDefault(motorName, 0.0);
+//            long currentTime = System.currentTimeMillis();
+//            double timeElapsed = (currentTime - lastUpdateTime) / 1000.0;
+//
+////            // Limit acceleration if enough time has passed
+//            if (lastUpdateTime != 0 && timeElapsed > 0) {
+//                double maxChange = POWER_CHANGE_LIMIT * timeElapsed;
+//                double powerChange = power - lastPower;
+//                if (Math.abs(powerChange) > maxChange) {
+//                    power = lastPower + Math.signum(powerChange) * maxChange;
+//                }
+//            }
 
             // Set the power and update tracking
             motor.setPower(power);
-            lastMotorPowers.put(motorName, power);
-            lastUpdateTime = currentTime;
+//            lastMotorPowers.put(motorName, power);
+//            lastUpdateTime = currentTime;
 
         } catch (Exception e) {
             telemetryManager.error(String.format("Failed to set %s motor power: %s",
@@ -158,16 +160,16 @@ public class DriveTrain extends AbstractComponent {
         DcMotor motor = null;
         switch(motorName.toLowerCase()) {
             case "frontleft":
-                motor = mtr_frontLeft;
+                motor = motorFrontLeft;
                 break;
             case "frontright":
-                motor = mtr_frontRight;
+                motor = motorFrontRight;
                 break;
             case "backleft":
-                motor = mtr_backLeft;
+                motor = motorBackLeft;
                 break;
             case "backright":
-                motor = mtr_backRight;
+                motor = motorBackRight;
                 break;
             default:
                 telemetryManager.error("Invalid motor name: " + motorName);
@@ -195,10 +197,10 @@ public class DriveTrain extends AbstractComponent {
 
         telemetryManager.addToBatch("Drive Status", "Moving forward");
 
-        setMotorPower(mtr_frontLeft, power, "frontLeft");
-        setMotorPower(mtr_backLeft, power, "backLeft");
-        setMotorPower(mtr_frontRight, power, "frontRight");
-        setMotorPower(mtr_backRight, power, "backRight");
+        setMotorPower(motorFrontLeft, power, "frontLeft");
+        setMotorPower(motorBackLeft, power, "backLeft");
+        setMotorPower(motorFrontRight, power, "frontRight");
+        setMotorPower(motorBackRight, power, "backRight");
 
         reportMotorPowers("forward");
     }
@@ -212,10 +214,10 @@ public class DriveTrain extends AbstractComponent {
 
         telemetryManager.addToBatch("Drive Status", "Turning right");
 
-        setMotorPower(mtr_frontLeft, power, "frontLeft");
-        setMotorPower(mtr_backLeft, power, "backLeft");
-        setMotorPower(mtr_frontRight, -power, "frontRight");
-        setMotorPower(mtr_backRight, -power, "backRight");
+        setMotorPower(motorFrontLeft, power, "frontLeft");
+        setMotorPower(motorBackLeft, power, "backLeft");
+        setMotorPower(motorFrontRight, -power, "frontRight");
+        setMotorPower(motorBackRight, -power, "backRight");
 
         reportMotorPowers("turn right");
     }
@@ -237,16 +239,16 @@ public class DriveTrain extends AbstractComponent {
 
             double[] powers = calculateWheelPowers(drive, strafe, rotate);
 
-            setMotorPower(mtr_frontLeft, powers[0], "frontLeft");
-            setMotorPower(mtr_backLeft, powers[1], "backLeft");
-            setMotorPower(mtr_frontRight, powers[2], "frontRight");
-            setMotorPower(mtr_backRight, powers[3], "backRight");
+            setMotorPower(motorFrontLeft, powers[0], "frontLeft");
+            setMotorPower(motorBackLeft, powers[1], "backLeft");
+            setMotorPower(motorFrontRight, powers[2], "frontRight");
+            setMotorPower(motorBackRight, powers[3], "backRight");
 
             telemetryData.put("Drive Input", drive);
             telemetryData.put("Strafe Input", strafe);
             telemetryData.put("Rotate Input", rotate);
 
-            reportMotorPowers("gamepad");
+            //reportMotorPowers("gamepad");
 
         } catch (Exception e) {
             telemetryManager.error("Drive control error: " + e.getMessage());
@@ -283,16 +285,16 @@ public class DriveTrain extends AbstractComponent {
     }
 
     private void reportMotorPowers(String context) {
-        telemetryData.put("Front Left Power", String.format("%.2f", mtr_frontLeft.getPower()));
-        telemetryData.put("Back Left Power", String.format("%.2f", mtr_backLeft.getPower()));
-        telemetryData.put("Front Right Power", String.format("%.2f", mtr_frontRight.getPower()));
-        telemetryData.put("Back Right Power", String.format("%.2f", mtr_backRight.getPower()));
+        telemetryData.put("Front Left Power", String.format("%.2f", motorFrontLeft.getPower()));
+        telemetryData.put("Back Left Power", String.format("%.2f", motorBackLeft.getPower()));
+        telemetryData.put("Front Right Power", String.format("%.2f", motorFrontRight.getPower()));
+        telemetryData.put("Back Right Power", String.format("%.2f", motorBackRight.getPower()));
 
         // Add encoder positions
-        telemetryData.put("Front Left Position", mtr_frontLeft.getCurrentPosition());
-        telemetryData.put("Back Left Position", mtr_backLeft.getCurrentPosition());
-        telemetryData.put("Front Right Position", mtr_frontRight.getCurrentPosition());
-        telemetryData.put("Back Right Position", mtr_backRight.getCurrentPosition());
+        telemetryData.put("Front Left Position", motorFrontLeft.getCurrentPosition());
+        telemetryData.put("Back Left Position", motorBackLeft.getCurrentPosition());
+        telemetryData.put("Front Right Position", motorFrontRight.getCurrentPosition());
+        telemetryData.put("Back Right Position", motorBackRight.getCurrentPosition());
     }
 
     @Override
@@ -301,10 +303,10 @@ public class DriveTrain extends AbstractComponent {
 
         telemetryManager.addToBatch("Drive Status", "Stopping Motors");
 
-        setMotorPower(mtr_frontLeft, 0, "frontLeft");
-        setMotorPower(mtr_backLeft, 0, "backLeft");
-        setMotorPower(mtr_frontRight, 0, "frontRight");
-        setMotorPower(mtr_backRight, 0, "backRight");
+        setMotorPower(motorFrontLeft, 0, "frontLeft");
+        setMotorPower(motorBackLeft, 0, "backLeft");
+        setMotorPower(motorFrontRight, 0, "frontRight");
+        setMotorPower(motorBackRight, 0, "backRight");
 
         reportMotorPowers("stop");
     }
@@ -317,10 +319,10 @@ public class DriveTrain extends AbstractComponent {
                 DcMotor.ZeroPowerBehavior.FLOAT;
 
         try {
-            mtr_frontLeft.setZeroPowerBehavior(behavior);
-            mtr_frontRight.setZeroPowerBehavior(behavior);
-            mtr_backLeft.setZeroPowerBehavior(behavior);
-            mtr_backRight.setZeroPowerBehavior(behavior);
+            motorFrontLeft.setZeroPowerBehavior(behavior);
+            motorFrontRight.setZeroPowerBehavior(behavior);
+            motorBackLeft.setZeroPowerBehavior(behavior);
+            motorBackRight.setZeroPowerBehavior(behavior);
 
             telemetryManager.info("Zero power behavior set to: " + behavior);
         } catch (Exception e) {

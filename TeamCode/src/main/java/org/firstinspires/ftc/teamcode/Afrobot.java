@@ -57,12 +57,12 @@ public class Afrobot {
         }
 
         // Initialize IMU
-        try {
-            imuSensor = new IMUSensor();
-            registerComponent(imuSensor);
-        } catch (Exception e) {
-            telemetryManager.warning("IMU initialization failed - some features may be limited: " + e.getMessage());
-        }
+//        try {
+//            imuSensor = new IMUSensor();
+//            registerComponent(imuSensor);
+//        } catch (Exception e) {
+//            telemetryManager.warning("IMU initialization failed - some features may be limited: " + e.getMessage());
+//        }
     }
 
     public void registerComponent(Component component) {
@@ -209,7 +209,7 @@ public class Afrobot {
             }
 
             // Execute button actions
-            executeActions(gamepad1, gamepad2);
+            //executeActions(gamepad1, gamepad2);
 
             // Update telemetry
             telemetryManager.writeBatch();
