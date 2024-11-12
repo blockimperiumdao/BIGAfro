@@ -82,13 +82,13 @@ public class DriveTrain extends AbstractComponent {
 
         try {
             // Reset encoder to ensure clean starting state
-            //motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
             // For general driving, RUN_USING_ENCODER provides velocity PID control
             motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             // Use FLOAT for smoother mecanum drive operation
-            //motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             motor.setPower(0);
 
             // Verify encoder is connected and functioning
