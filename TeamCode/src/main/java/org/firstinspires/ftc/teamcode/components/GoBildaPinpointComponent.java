@@ -37,11 +37,19 @@ public class GoBildaPinpointComponent extends AbstractComponent {
 
             // Configure default settings
             pinpoint.setOffsets(DEFAULT_X_OFFSET, DEFAULT_Y_OFFSET);
-            pinpoint.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+
+            //TODO, this needs to be configurable
+            pinpoint.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
+
+            // x increases forward
+            // y increases to the right
             pinpoint.setEncoderDirections(
-                    GoBildaPinpointDriver.EncoderDirection.FORWARD,
-                    GoBildaPinpointDriver.EncoderDirection.FORWARD
+                    GoBildaPinpointDriver.EncoderDirection.REVERSED,
+                    GoBildaPinpointDriver.EncoderDirection.REVERSED
             );
+
+            // recalibrate for starting state
+            recalibrateIMU();
 
             // Reset position and calibrate
             resetPosAndIMU();
@@ -66,7 +74,7 @@ public class GoBildaPinpointComponent extends AbstractComponent {
         try {
             long currentTime = System.currentTimeMillis();
 
-            // Update device data
+            // Pull the data from the odometry computer
             pinpoint.update();
 
             // Calculate update frequency
@@ -82,17 +90,17 @@ public class GoBildaPinpointComponent extends AbstractComponent {
 
             // Update telemetry data
             telemetryData.clear();
-            telemetryData.put("Status", pinpoint.getDeviceStatus().toString());
+//            telemetryData.put("Status", pinpoint.getDeviceStatus().toString());
             telemetryData.put("Position", String.format(Locale.US,
                     "X: %.2f, Y: %.2f, H: %.2f",
                     position.getX(DistanceUnit.MM),
                     position.getY(DistanceUnit.MM),
                     position.getHeading(AngleUnit.DEGREES)));
-            telemetryData.put("Velocity", String.format(Locale.US,
-                    "X: %.2f, Y: %.2f, H: %.2f",
-                    velocity.getX(DistanceUnit.MM),
-                    velocity.getY(DistanceUnit.MM),
-                    velocity.getHeading(AngleUnit.DEGREES)));
+//            telemetryData.put("Velocity", String.format(Locale.US,
+//                    "X: %.2f, Y: %.2f, H: %.2f",
+//                    velocity.getX(DistanceUnit.MM),
+//                    velocity.getY(DistanceUnit.MM),
+//                    velocity.getHeading(AngleUnit.DEGREES)));
             telemetryData.put("Update Frequency", String.format("%.1f Hz", updateFrequency));
             telemetryData.put("Device Frequency", String.format("%.1f Hz", pinpoint.getFrequency()));
 

@@ -20,7 +20,7 @@ public class SquarePathAutonomous extends LinearOpMode {
         // Repeat the square path 4 times
         for (int i = 0; i < 4; i++) {
             // Move forward for 5 seconds
-            robot.getDriveTrain().moveForward(0.5);  // Set power to 0.5
+            //robot.getDriveTrain().moveForward(0.5);  // Set power to 0.5
             sleep(5000);  // Move forward for 5 seconds
 
             // Stop briefly before turning
@@ -28,7 +28,7 @@ public class SquarePathAutonomous extends LinearOpMode {
             sleep(500);   // Pause for 0.5 seconds
 
             // Turn 90 degrees to the right
-            robot.getDriveTrain().turnRight(0.5);  // Set turn power to 0.5
+            //robot.getDriveTrain().turnRight(0.5);  // Set turn power to 0.5
             sleep(1000);  // Adjust timing based on your robot's turn speed
 
             // Stop briefly after turning

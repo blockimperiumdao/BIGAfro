@@ -110,7 +110,7 @@ public class DriveTrain extends AbstractComponent {
         if (!isOperational()) {
             return;
         }
-        reportMotorPowers("update");
+        //reportMotorPowers("update");
     }
 
     private void setMotorPower(DcMotor motor, double power, String motorName) {
@@ -189,42 +189,42 @@ public class DriveTrain extends AbstractComponent {
         }
     }
 
-    public void moveForward(double power) {
-        if (!isOperational()) {
-            telemetryManager.error("Cannot move: Drive train not initialized");
-            return;
-        }
-
-        telemetryManager.addToBatch("Drive Status", "Moving forward");
-
-        setMotorPower(motorFrontLeft, power, "frontLeft");
-        setMotorPower(motorBackLeft, power, "backLeft");
-        setMotorPower(motorFrontRight, power, "frontRight");
-        setMotorPower(motorBackRight, power, "backRight");
-
-        reportMotorPowers("forward");
-    }
-
-    public void moveBackward(double power) {
-        moveForward(-power);
-    }
-
-    public void turnRight(double power) {
-        if (!isOperational()) return;
-
-        telemetryManager.addToBatch("Drive Status", "Turning right");
-
-        setMotorPower(motorFrontLeft, power, "frontLeft");
-        setMotorPower(motorBackLeft, power, "backLeft");
-        setMotorPower(motorFrontRight, -power, "frontRight");
-        setMotorPower(motorBackRight, -power, "backRight");
-
-        reportMotorPowers("turn right");
-    }
-
-    public void turnLeft(double power) {
-        turnRight(-power);
-    }
+//    public void moveForward(double power) {
+//        if (!isOperational()) {
+//            telemetryManager.error("Cannot move: Drive train not initialized");
+//            return;
+//        }
+//
+//        telemetryManager.addToBatch("Drive Status", "Moving forward");
+//
+//        setMotorPower(motorFrontLeft, power, "frontLeft");
+//        setMotorPower(motorBackLeft, power, "backLeft");
+//        setMotorPower(motorFrontRight, power, "frontRight");
+//        setMotorPower(motorBackRight, power, "backRight");
+//
+//        reportMotorPowers("forward");
+//    }
+//
+//    public void moveBackward(double power) {
+//        moveForward(-power);
+//    }
+//
+//    public void turnRight(double power) {
+//        if (!isOperational()) return;
+//
+//        telemetryManager.addToBatch("Drive Status", "Turning right");
+//
+//        setMotorPower(motorFrontLeft, power, "frontLeft");
+//        setMotorPower(motorBackLeft, power, "backLeft");
+//        setMotorPower(motorFrontRight, -power, "frontRight");
+//        setMotorPower(motorBackRight, -power, "backRight");
+//
+//        reportMotorPowers("turn right");
+//    }
+//
+//    public void turnLeft(double power) {
+//        turnRight(-power);
+//    }
 
     public void driveWithGamepad(Gamepad gamepad) {
         if (!isOperational()) {

@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.actions.ActionInterface;
 import org.firstinspires.ftc.teamcode.actions.ActionState;
 import org.firstinspires.ftc.teamcode.components.Component;
 import org.firstinspires.ftc.teamcode.components.DriveTrain;
+import org.firstinspires.ftc.teamcode.components.GoBildaPinpointComponent;
 import org.firstinspires.ftc.teamcode.components.IMUSensor;
 
 import java.util.HashMap;
@@ -26,6 +27,7 @@ public class Afrobot {
     // Frequently accessed components
     private DriveTrain driveTrain;
     private IMUSensor imuSensor;
+    private GoBildaPinpointComponent goBildaPinpointComponent;
 
     private boolean isInitialized = false;
 
@@ -56,12 +58,22 @@ public class Afrobot {
             throw e; // Re-throw as this is a critical component
         }
 
-        // Initialize IMU
+//        // Initialize IMU
+//        try {
+//            imuSensor = new IMUSensor();
+//            registerComponent(imuSensor);
+//        } catch (Exception e) {
+//            telemetryManager.warning("IMU initialization failed - some features may be limited: " + e.getMessage());
+//        }
+
+
         try {
-            imuSensor = new IMUSensor();
-            registerComponent(imuSensor);
-        } catch (Exception e) {
-            telemetryManager.warning("IMU initialization failed - some features may be limited: " + e.getMessage());
+            goBildaPinpointComponent = new GoBildaPinpointComponent();
+            registerComponent(goBildaPinpointComponent);
+        }
+        catch ( Exception e )
+        {
+            telemetryManager.warning("GoBildaPinpoint initialization failed - direction features will be limited: " + e.getMessage() );
         }
     }
 
@@ -211,7 +223,8 @@ public class Afrobot {
             // Execute button actions
             //executeActions(gamepad1, gamepad2);
 
-            // Update telemetry
+            // Write telemetry to device
+            //
             telemetryManager.writeBatch();
 
         } catch (Exception e) {

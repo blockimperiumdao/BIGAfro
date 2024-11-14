@@ -91,9 +91,11 @@ public class IMUSensor extends AbstractComponent {
             }
 
             // Store angular velocity
-            telemetryData.put("Angular_Velocity_X", angularVelocity.xRotationRate);
-            telemetryData.put("Angular_Velocity_Y", angularVelocity.yRotationRate);
-            telemetryData.put("Angular_Velocity_Z", angularVelocity.zRotationRate);
+//            telemetryData.put("Angular_Velocity_X", angularVelocity.xRotationRate);
+//            telemetryData.put("Angular_Velocity_Y", angularVelocity.yRotationRate);
+//            telemetryData.put("Angular_Velocity_Z", angularVelocity.zRotationRate);
+
+
 
             // Update cached values
             lastYaw = currentYaw;
