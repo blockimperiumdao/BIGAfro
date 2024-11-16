@@ -44,15 +44,18 @@ public class GoBildaPinpointComponent extends AbstractComponent {
             // x increases forward
             // y increases to the right
             pinpoint.setEncoderDirections(
-                    GoBildaPinpointDriver.EncoderDirection.REVERSED,
+                    GoBildaPinpointDriver.EncoderDirection.FORWARD,
                     GoBildaPinpointDriver.EncoderDirection.REVERSED
             );
+
+            // Reset position and calibrate
+            resetPosAndIMU();
 
             // recalibrate for starting state
             recalibrateIMU();
 
-            // Reset position and calibrate
-            resetPosAndIMU();
+            Pose2D initialPosition = new Pose2D(DistanceUnit.MM, 0, 0, AngleUnit.DEGREES, 0);
+            pinpoint.setPosition( initialPosition );
 
             // Log initialization info
             telemetryManager.info("GoBilda Pinpoint initialized successfully");
