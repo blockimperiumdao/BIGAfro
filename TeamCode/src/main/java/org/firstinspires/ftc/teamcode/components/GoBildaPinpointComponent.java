@@ -11,9 +11,18 @@ public class GoBildaPinpointComponent extends AbstractComponent {
     // Hardware reference
     private GoBildaPinpointDriver pinpoint;
 
+
+
     // Configuration constants - these could be made configurable
-    private static final double DEFAULT_X_OFFSET = -84.0;  // mm
-    private static final double DEFAULT_Y_OFFSET = -168.0; // mm
+//    private static final double DEFAULT_X_OFFSET = -84.0;  // mm
+//    private static final double DEFAULT_Y_OFFSET = -168.0; // mm
+
+    // https://www.gobilda.com/content/user_manuals/3110-0002-0001%20User%20Guide.pdf
+    // the X/forward pod is -4 inches (-101.6mm) off center (to the right of center which makes it negative)
+    // the Y pod offset is -6 3/4 inches (-171.45)off the center point (below the center)
+    private static final double DEFAULT_X_OFFSET = -101.6;  // mm
+    private static final double DEFAULT_Y_OFFSET = -171.45; // mm
+
 
     // State tracking
     private long lastUpdateTime = 0;
