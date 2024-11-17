@@ -6,9 +6,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.actions.ActionInterface;
 import org.firstinspires.ftc.teamcode.actions.ActionState;
 import org.firstinspires.ftc.teamcode.components.Component;
-import org.firstinspires.ftc.teamcode.components.DriveTrain;
-import org.firstinspires.ftc.teamcode.components.GoBildaPinpointComponent;
-import org.firstinspires.ftc.teamcode.components.IMUSensor;
+import org.firstinspires.ftc.teamcode.components.motion.DriveTrain;
+import org.firstinspires.ftc.teamcode.components.imu.GoBildaPinpointComponent;
+import org.firstinspires.ftc.teamcode.components.imu.IMUSensor;
 
 import java.util.HashMap;
 import java.util.Map;

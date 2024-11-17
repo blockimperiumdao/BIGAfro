@@ -1,8 +1,12 @@
-package org.firstinspires.ftc.teamcode.components;
+package org.firstinspires.ftc.teamcode.components.motion;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Gamepad;
+
+import org.firstinspires.ftc.teamcode.components.AbstractComponent;
+import org.firstinspires.ftc.teamcode.components.ComponentType;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.HashMap;

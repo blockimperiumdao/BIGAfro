@@ -21,7 +21,7 @@
  */
 
 
-package org.firstinspires.ftc.teamcode.devices;
+package org.firstinspires.ftc.teamcode.drivers;
 
 import static com.qualcomm.robotcore.util.TypeConversion.byteArrayToInt;
 

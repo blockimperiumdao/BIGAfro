@@ -1,9 +1,11 @@
-package org.firstinspires.ftc.teamcode.components;
+package org.firstinspires.ftc.teamcode.components.imu;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-import org.firstinspires.ftc.teamcode.devices.GoBildaPinpointDriver;
+import org.firstinspires.ftc.teamcode.components.AbstractComponent;
+import org.firstinspires.ftc.teamcode.components.ComponentType;
+import org.firstinspires.ftc.teamcode.drivers.GoBildaPinpointDriver;
 
 import java.util.Locale;
 
