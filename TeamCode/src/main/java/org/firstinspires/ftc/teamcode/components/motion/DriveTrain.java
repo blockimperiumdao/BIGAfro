@@ -287,6 +287,31 @@ public class DriveTrain extends AbstractComponent {
 
         return powers;
     }
+    public void driveWithPower(double drive, double strafe, double rotate) {
+        if (!isOperational()) {
+            telemetryManager.error("Drive system not initialized!");
+            return;
+        }
+
+        try {
+            // Calculate motor powers for mecanum drive
+            double[] powers = calculateWheelPowers(drive, strafe, rotate);
+
+            // Apply motor powers
+            setMotorPower(motorFrontLeft, powers[0], "frontLeft");
+            setMotorPower(motorBackLeft, powers[1], "backLeft");
+            setMotorPower(motorFrontRight, powers[2], "frontRight");
+            setMotorPower(motorBackRight, powers[3], "backRight");
+
+            // Optional telemetry
+            telemetryData.put("Drive Input", drive);
+            telemetryData.put("Strafe Input", strafe);
+            telemetryData.put("Rotate Input", rotate);
+        } catch (Exception e) {
+            telemetryManager.error("Drive control error: " + e.getMessage());
+            emergencyStop("Drive control failure");
+        }
+    }
 
     private void reportMotorPowers(String context) {
         telemetryData.put("Front Left Power", String.format("%.2f", motorFrontLeft.getPower()));

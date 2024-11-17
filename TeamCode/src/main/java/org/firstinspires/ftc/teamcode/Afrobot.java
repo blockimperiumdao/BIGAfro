@@ -9,6 +9,8 @@ import org.firstinspires.ftc.teamcode.components.Component;
 import org.firstinspires.ftc.teamcode.components.motion.DriveTrain;
 import org.firstinspires.ftc.teamcode.components.imu.GoBildaPinpointComponent;
 import org.firstinspires.ftc.teamcode.components.imu.IMUSensor;
+import org.firstinspires.ftc.teamcode.systems.SystemInterface;
+import org.firstinspires.ftc.teamcode.systems.navigation.SULUNavigationSystem;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +18,7 @@ import java.util.Map;
 public class Afrobot {
     // Component management
     private Map<String, Component> components;
+    private Map<String, SystemInterface> systems;
     private Map<String, ActionInterface> actionMap;
 
     // Core robot systems
@@ -28,12 +31,15 @@ public class Afrobot {
     private DriveTrain driveTrain;
     private IMUSensor imuSensor;
     private GoBildaPinpointComponent goBildaPinpointComponent;
+    private SULUNavigationSystem suluNavigationSystem;
 
     private boolean isInitialized = false;
 
     public Afrobot(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) {
         this.components = new HashMap<>();
         this.actionMap = new HashMap<>();
+        this.systems = new HashMap<>();
+
         this.telemetryManager = new TelemetryManager(telemetry);
         this.hardwareMap = hardwareMap;
         this.gamepad1 = gamepad1;
@@ -45,6 +51,13 @@ public class Afrobot {
             telemetryManager.info("Robot initialized successfully");
         } catch (Exception e) {
             telemetryManager.error("Robot initialization failed: " + e.getMessage());
+        }
+
+        try {
+            initializeSystems();
+        }
+        catch( Exception e ) {
+            telemetryManager.error("Robot systems failed: " + e.getMessage());
         }
     }
 
@@ -77,6 +90,24 @@ public class Afrobot {
         }
     }
 
+    private void initializeSystems() {
+
+        Map<String,Object> parameters = new HashMap<String,Object>();
+
+        parameters.put( SULUNavigationSystem.IMU_SYSTEM_PARAMETER, goBildaPinpointComponent);
+        parameters.put( SULUNavigationSystem.DRIVE_TRAIN_PARAMETER, driveTrain);
+
+        try {
+            suluNavigationSystem = new SULUNavigationSystem();
+            registerSystem( suluNavigationSystem, parameters );
+        }
+        catch( Exception e )
+        {
+            telemetryManager.warning("Unable to initialize systems " + e.getMessage() );
+            emergencyStop();
+        }
+    }
+
     public void registerComponent(Component component) {
         try {
             component.init(this);
@@ -86,6 +117,18 @@ public class Afrobot {
             telemetryManager.error("Failed to register component " +
                     component.getName() + ": " + e.getMessage());
             throw new RuntimeException("Component registration failed", e);
+        }
+    }
+
+    public void registerSystem(SystemInterface system, Map <String, Object> parameters ) {
+        try {
+            system.init( parameters);
+            systems.put(system.getName(), system);
+            telemetryManager.info("Registered system: " + system.getName());
+        } catch (Exception e) {
+            telemetryManager.error("Failed to register system " +
+                    system.getName() + ": " + e.getMessage());
+            throw new RuntimeException("System registration failed", e);
         }
     }
 
@@ -211,6 +254,19 @@ public class Afrobot {
                     );
                 } catch (Exception e) {
                     telemetryManager.error("Component " + component.getName() +
+                            " update failed: " + e.getMessage());
+                }
+            }
+
+            for (SystemInterface system : systems.values()) {
+                try {
+                    system.update();
+                    telemetryManager.addMapToBatch(
+                            system.getName(),
+                            system.getTelemetry()
+                    );
+                } catch (Exception e) {
+                    telemetryManager.error("System " + system.getName() +
                             " update failed: " + e.getMessage());
                 }
             }
