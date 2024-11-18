@@ -36,6 +36,12 @@ Drivers:	Any specific drivers or third party source files are located in this pa
 Opmodes:	This contains the basic opmodes that can be modified or extended. These represent the 
             core use cases for how the robot is intended to be uses.
 
+Systems:    This contains any standalone systems that are involved during the robot update cycle and
+            are intended for standalone operation for systems. This is not the same as components
+            which are hardware bindings on the robot. For example, a navigation or path planning
+            system would live here. An example is SULU which is a navigation component for 
+            maneuvering around the FTC field.
+
 
 Each OpMode sample class begins with several lines of code like the ones shown below:
 
