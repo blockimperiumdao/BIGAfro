@@ -48,13 +48,14 @@ public class Afrobot {
         try {
             initializeComponents();
             isInitialized = true;
-            telemetryManager.info("Robot initialized successfully");
+            telemetryManager.info("Robot components initialized successfully");
         } catch (Exception e) {
             telemetryManager.error("Robot initialization failed: " + e.getMessage());
         }
 
         try {
             initializeSystems();
+            telemetryManager.info("Robot systems initialized successfully");
         }
         catch( Exception e ) {
             telemetryManager.error("Robot systems failed: " + e.getMessage());
@@ -135,6 +136,10 @@ public class Afrobot {
     @SuppressWarnings("unchecked")
     public <T extends Component> T getComponent(String name) {
         return (T) components.get(name);
+    }
+
+    public <T extends SystemInterface> T getSystem(String name) {
+        return (T) systems.get(name);
     }
 
     public void bindAction(String button, ActionInterface action) {

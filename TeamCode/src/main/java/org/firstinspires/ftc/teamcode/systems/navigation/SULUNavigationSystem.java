@@ -11,6 +11,8 @@ import java.util.Map;
 
 public class SULUNavigationSystem extends AbstractSystem {
 
+    public static String SYSTEM_NAME = "sulu";
+
     public static String DRIVE_TRAIN_PARAMETER = "driveTrain";
     public static String IMU_SYSTEM_PARAMETER = "imuSystem";
 
@@ -38,6 +40,7 @@ public class SULUNavigationSystem extends AbstractSystem {
         this.targetX = target_x;
         this.targetY = target_y;
         this.targetHeading = target_heading;
+        isComplete = false;
     }
 
     @Override
@@ -61,6 +64,7 @@ public class SULUNavigationSystem extends AbstractSystem {
             if (distanceToTarget <= POSITION_THRESHOLD &&
                     Math.abs(normalizeAngle(targetHeading - currentHeading)) <= HEADING_THRESHOLD) {
                 driveTrain.stop();
+                isComplete = true;
                 return;
             }
 
@@ -75,12 +79,13 @@ public class SULUNavigationSystem extends AbstractSystem {
 
     @Override
     public String getName() {
-        return "Sulu";
+        return SYSTEM_NAME;
     }
 
     @Override
     public void stop() {
         isComplete = true;
+        driveTrain.stop();
     }
 
     @Override
