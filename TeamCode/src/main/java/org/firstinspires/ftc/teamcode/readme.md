@@ -34,7 +34,8 @@ Drivers:	Any specific drivers or third party source files are located in this pa
             can be compiled with the rest of the project and managed accordingly
 
 Opmodes:	This contains the basic opmodes that can be modified or extended. These represent the 
-            core use cases for how the robot is intended to be uses.
+            core use cases for how the robot is intended to be uses. This is futher broken into 
+            autonomous and teleop opmodes.
 
 Systems:    This contains any standalone systems that are involved during the robot update cycle and
             are intended for standalone operation for systems. This is not the same as components
